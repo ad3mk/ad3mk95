@@ -2,14 +2,17 @@
 	<div class="page-container">
 		<b-container>
 			<br />
-			<h2>User Dashboard</h2>
-			<p>Logged in as {{ loggedUserName }}({{ loggedUserEmail }}) - {{ loggedUserRole }}</p>
+			<p>Logged in as {{ loggedUserName }} ({{ loggedUserEmail }}) - {{ loggedUserRole }}</p>
+			<hr />
+
+			<SPDashboard v-if="loggedUserRole === 'Service Provider'"></SPDashboard>
 		</b-container>
 	</div>
 </template>
 
 <script>
 import { /*mapActions, */ mapGetters } from "vuex";
+import SPDashboard from "./serviceproviders/SPDashboard";
 
 export default {
 	data() {
@@ -27,6 +30,10 @@ export default {
 			loggedUserEmail: "getLoggedUserEmail",
 			loggedUserRole: "getLoggedUserRole"
 		})
+	},
+
+	components: {
+		SPDashboard
 	}
 };
 </script>
