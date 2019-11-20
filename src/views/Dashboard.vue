@@ -6,13 +6,15 @@
 			<hr />
 
 			<SPDashboard v-if="loggedUserRole === 'Service Provider'"></SPDashboard>
+			<STDashboard v-else></STDashboard>
 		</b-container>
 	</div>
 </template>
 
 <script>
 import { /*mapActions, */ mapGetters } from "vuex";
-import SPDashboard from "./serviceproviders/SPDashboard";
+import SPDashboard from "./dashboard/SPDashboard";
+import STDashboard from "./dashboard/STDashboard";
 
 export default {
 	data() {
@@ -33,7 +35,8 @@ export default {
 	},
 
 	components: {
-		SPDashboard
+		SPDashboard,
+		STDashboard
 	}
 };
 </script>

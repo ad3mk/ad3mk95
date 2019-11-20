@@ -25,7 +25,7 @@
 									<em>{{ loggedUserName }}</em>
 								</template>
 								<b-dropdown-item hre="#" @click="goToDashboard">Dashboard</b-dropdown-item>
-								<b-dropdown-item href="#" @click="logoutNow">Sign Out</b-dropdown-item>
+								<b-dropdown-item href="#" @click="logoutNow">Log Out</b-dropdown-item>
 							</b-nav-item-dropdown>
 						</template>
 					</b-navbar-nav>
