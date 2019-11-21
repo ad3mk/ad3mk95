@@ -63,12 +63,45 @@
     <table class="table b-table table-striped table-hover mt-5" v-if="filteredResult.length > 0">
       <thead>
         <tr>
-          <th>Topic</th>
-          <th>Price</th>
+          <th @click="sortBy('topic')" class="sortable">
+            Topic
+            <span
+              class="arrow-up"
+              v-if="sorting.sortBy === 'topic' && sorting.order === 'descending'"
+            ></span>
+
+            <span
+              class="arrow-down"
+              v-if="sorting.sortBy === 'topic' && sorting.order === 'ascending'"
+            ></span>
+          </th>
+          <th @click="sortBy('price')" class="sortable">
+            Price
+            <span
+              class="arrow-up"
+              v-if="sorting.sortBy === 'price' && sorting.order === 'descending'"
+            ></span>
+
+            <span
+              class="arrow-down"
+              v-if="sorting.sortBy === 'price' && sorting.order === 'ascending'"
+            ></span>
+          </th>
           <th>Time</th>
           <th>Duration</th>
           <th>By</th>
-          <th>Rating</th>
+          <th @click="sortBy('rating')" class="sortable">
+            Rating
+            <span
+              class="arrow-up"
+              v-if="sorting.sortBy === 'rating' && sorting.order === 'descending'"
+            ></span>
+
+            <span
+              class="arrow-down"
+              v-if="sorting.sortBy === 'rating' && sorting.order === 'ascending'"
+            ></span>
+          </th>
         </tr>
       </thead>
 
@@ -108,10 +141,13 @@
     >
       <div class="p-2">
         <p>Current average rating is {{ clickedActivity.averageRating }} ({{clickedActivity.ratings.length}})</p>
-        <br />
+
         <p>
           Your Rating:
-          <span v-if="myGivenRating > -1">{{ myGivenRating }}</span>
+          <span v-if="myGivenRating > -1">
+            {{ myGivenRating }}
+            <br />(Your rating can not be changed)
+          </span>
         </p>
         <star-rating
           @rating-selected="giveRating($event)"
@@ -141,7 +177,11 @@ export default {
       clickedActivity: {
         ratings: []
       },
-      myRating: 0
+      myRating: 0,
+      sorting: {
+        sortBy: "none",
+        order: "ascending"
+      }
     };
   },
 
@@ -206,6 +246,71 @@ export default {
 
         return true;
       });
+
+      // sort by topic
+      if (
+        this.sorting.sortBy === "topic" &&
+        this.sorting.order === "ascending"
+      ) {
+        fResult.sort((a, b) => {
+          if (a.topic < b.topic) {
+            return -1;
+          }
+          if (a.topic > b.topic) {
+            return 1;
+          }
+
+          return 0;
+        });
+      } else if (
+        this.sorting.sortBy === "topic" &&
+        this.sorting.order === "descending"
+      ) {
+        fResult.sort((a, b) => {
+          if (a.topic < b.topic) {
+            return 1;
+          }
+          if (a.topic > b.topic) {
+            return -1;
+          }
+
+          return 0;
+        });
+      }
+
+      // sort by price
+      if (
+        this.sorting.sortBy === "price" &&
+        this.sorting.order === "ascending"
+      ) {
+        fResult.sort((a, b) => {
+          return parseFloat(a.price) - parseFloat(b.price);
+        });
+      } else if (
+        this.sorting.sortBy === "price" &&
+        this.sorting.order === "descending"
+      ) {
+        fResult.sort((a, b) => {
+          return parseFloat(b.price) - parseFloat(a.price);
+        });
+      }
+
+      // sort by rating
+      if (
+        this.sorting.sortBy === "rating" &&
+        this.sorting.order === "ascending"
+      ) {
+        fResult.sort((a, b) => {
+          return parseFloat(a.averageRating) - parseFloat(b.averageRating);
+        });
+      } else if (
+        this.sorting.sortBy === "rating" &&
+        this.sorting.order === "descending"
+      ) {
+        fResult.sort((a, b) => {
+          return parseFloat(b.averageRating) - parseFloat(a.averageRating);
+        });
+      }
 
       return fResult;
     },
@@ -277,6 +382,12 @@ export default {
 
       this.editActivity(this.clickedActivity);
       this.calculateAverageRating(this.clickedActivity);
+    },
+
+    sortBy(by) {
+      this.sorting.sortBy = by;
+      this.sorting.order =
+        this.sorting.order === "ascending" ? "descending" : "ascending";
     }
   },
 
