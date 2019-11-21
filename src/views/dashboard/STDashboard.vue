@@ -60,7 +60,7 @@
           v-model="ratingMax"
           type="number"
           placeholder="Max"
-          class="small-input m-1"
+          class="small-input m-1 mr-3"
           size="sm"
         ></b-form-input>
 
@@ -69,7 +69,6 @@
         </span>
       </b-col>
     </b-row>
-
     <table class="table b-table table-striped table-hover mt-5">
       <thead>
         <tr>
@@ -90,13 +89,13 @@
           <td>{{ activity.activityLength }}</td>
           <td>{{ activity.userEmail }}</td>
           <td>
-            5
+            {{ activity.averageRating }}
             <b-button
               size="sm"
-              class="mr-2"
-              variant="danger"
+              class="mr-2 ml-3"
+              variant="success"
               @click="
-                deleteModal = true;
+                ratingModal = true;
                 clickedActivity = activity;
               "
             >
@@ -108,11 +107,32 @@
     </table>
 
     <br />
+
+    <b-modal
+      id="rating-modal"
+      scrollable
+      title="Rate this class/activity"
+      v-model="ratingModal"
+      size="md"
+      hide-footer
+      centered
+    >
+      <div class="p-2">
+        <p>Current average rating is {{ clickedActivity.averageRating }}</p>
+        <br />
+        <p>Your Rating</p>
+        <star-rating
+          @rating-selected="giveRating($event)"
+          :rating="myRating"
+        ></star-rating>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import { /*mapActions, */ mapGetters } from "vuex";
+import StarRating from "vue-star-rating";
 
 export default {
   data() {
@@ -123,13 +143,17 @@ export default {
       priceMax: "",
       ratingMin: "",
       ratingMax: "",
-      filterTopic: ""
+      filterTopic: "",
+      ratingModal: false,
+      clickedActivity: {},
+      myRating: 0
     };
   },
 
   computed: {
     ...mapGetters({
-      activities: "getActivities"
+      activities: "getActivities",
+      loggedUserEmail: "getLoggedUserEmail"
     }),
 
     filteredResult() {
@@ -187,6 +211,24 @@ export default {
           .toLowerCase()
           .includes(this.searchKeyword.toLowerCase());
       });
+
+      this.searchResults.forEach(result => {
+        this.calculateAverageRating(result);
+      });
+    },
+
+    calculateAverageRating(activity) {
+      let averageRating = 0;
+
+      if (activity.ratings.length > 0) {
+        let totalRating = 0;
+        activity.ratings.forEach(rating => {
+          totalRating += parseInt(rating.value);
+        });
+
+        averageRating = totalRating / activity.ratings.length;
+      }
+      activity.averageRating = averageRating;
     },
 
     clearFilter() {
@@ -195,7 +237,21 @@ export default {
       this.ratingMin = "";
       this.ratingMax = "";
       this.filterTopic = "";
+    },
+
+    giveRating(r) {
+      //console.log(e);
+      this.clickedActivity.ratings.push({
+        userEmail: this.loggedUserEmail,
+        value: r
+      });
+
+      this.calculateAverageRating(this.clickedActivity);
     }
+  },
+
+  components: {
+    StarRating
   }
 };
 </script>
