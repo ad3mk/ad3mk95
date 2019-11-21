@@ -16,11 +16,17 @@
     </b-row>
     <br />
     <b-row v-if="searchResults.length > 0">
-      <b-col md="3">
+      <b-col md="2">
         <strong>Filter Result</strong>
       </b-col>
 
-      <b-col md="3"> <span class="mr-2">Topic</span> ttt </b-col>
+      <b-col md="4">
+        <b-form-select
+          v-model="filterTopic"
+          :options="filterTopics"
+          size="sm"
+        ></b-form-select>
+      </b-col>
       <b-col md="3">
         <span class="mr-2">Price</span>
         <b-form-input
@@ -111,7 +117,8 @@ export default {
       priceMin: "",
       priceMax: "",
       ratingMin: "",
-      ratingMax: ""
+      ratingMax: "",
+      filterTopic: ""
     };
   },
 
@@ -126,9 +133,7 @@ export default {
         // filter by price
         let priceMin = parseFloat(this.priceMin);
         let priceMax = parseFloat(this.priceMax);
-
         let itemPrice = parseFloat(item.price);
-
         if (this.priceMin !== "" && this.priceMax !== "") {
           if (
             itemPrice < priceMin ||
@@ -139,10 +144,30 @@ export default {
           }
         }
 
+        // filter by topic
+        if (this.filterTopic && this.filterTopic !== item.topic) {
+          return false;
+        }
+
         return true;
       });
 
       return fResult;
+    },
+
+    filterTopics() {
+      let fTopics = [{ text: "--Select a topic--", value: "" }]; // { text: '', value: '' }
+      this.searchResults.forEach(searchItem => {
+        let existIndex = fTopics.findIndex(topicItem => {
+          return topicItem.text === searchItem.topic;
+        });
+
+        if (existIndex === -1) {
+          fTopics.push({ text: searchItem.topic, value: searchItem.topic });
+        }
+      });
+
+      return fTopics;
     }
   },
 
