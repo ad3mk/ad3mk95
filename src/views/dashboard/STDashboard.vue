@@ -17,23 +17,24 @@
     <br />
     <b-row v-if="searchResults.length > 0">
       <b-col md="2">
-        <strong>Filter Result</strong>
+        <strong class="m-1">Filter Result</strong>
       </b-col>
 
-      <b-col md="4">
+      <b-col md="2">
         <b-form-select
           v-model="filterTopic"
           :options="filterTopics"
           size="sm"
+          class="m-1"
         ></b-form-select>
       </b-col>
-      <b-col md="3">
-        <span class="mr-2">Price</span>
+      <b-col md="4">
+        <span class="m-1 mr-2">Price</span>
         <b-form-input
           v-model="priceMin"
           type="number"
           placeholder="Min"
-          class="small-input"
+          class="small-input m-1"
           size="sm"
         ></b-form-input>
         -
@@ -41,17 +42,17 @@
           v-model="priceMax"
           type="number"
           placeholder="Max"
-          class="small-input"
+          class="small-input m-1"
           size="sm"
         ></b-form-input>
       </b-col>
-      <b-col md="3">
-        <span class="mr-2">Rating</span>
+      <b-col md="4">
+        <span class="m-1 mr-2">Rating</span>
         <b-form-input
           v-model="ratingMin"
           type="number"
           placeholder="Min"
-          class="small-input"
+          class="small-input m-1"
           size="sm"
         ></b-form-input>
         -
@@ -59,9 +60,13 @@
           v-model="ratingMax"
           type="number"
           placeholder="Max"
-          class="small-input"
+          class="small-input m-1"
           size="sm"
         ></b-form-input>
+
+        <span class="clear-filter" title="clear filter" @click="clearFilter">
+          x
+        </span>
       </b-col>
     </b-row>
 
@@ -156,7 +161,7 @@ export default {
     },
 
     filterTopics() {
-      let fTopics = [{ text: "--Select a topic--", value: "" }]; // { text: '', value: '' }
+      let fTopics = [{ text: "--Select topic--", value: "" }]; // { text: '', value: '' }
       this.searchResults.forEach(searchItem => {
         let existIndex = fTopics.findIndex(topicItem => {
           return topicItem.text === searchItem.topic;
@@ -182,6 +187,14 @@ export default {
           .toLowerCase()
           .includes(this.searchKeyword.toLowerCase());
       });
+    },
+
+    clearFilter() {
+      this.priceMin = "";
+      this.priceMax = "";
+      this.ratingMin = "";
+      this.ratingMax = "";
+      this.filterTopic = "";
     }
   }
 };
@@ -191,5 +204,11 @@ export default {
 .small-input {
   width: 70px;
   display: inline;
+}
+
+.clear-filter {
+  cursor: pointer;
+  color: red;
+  font-weight: bold;
 }
 </style>
