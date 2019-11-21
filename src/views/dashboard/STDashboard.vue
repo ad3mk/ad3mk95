@@ -21,12 +21,7 @@
       </b-col>
 
       <b-col md="2">
-        <b-form-select
-          v-model="filterTopic"
-          :options="filterTopics"
-          size="sm"
-          class="m-1"
-        ></b-form-select>
+        <b-form-select v-model="filterTopic" :options="filterTopics" size="sm" class="m-1"></b-form-select>
       </b-col>
       <b-col md="4">
         <span class="m-1 mr-2">Price</span>
@@ -36,8 +31,7 @@
           placeholder="Min"
           class="small-input m-1"
           size="sm"
-        ></b-form-input>
-        -
+        ></b-form-input>-
         <b-form-input
           v-model="priceMax"
           type="number"
@@ -54,8 +48,7 @@
           placeholder="Min"
           class="small-input m-1"
           size="sm"
-        ></b-form-input>
-        -
+        ></b-form-input>-
         <b-form-input
           v-model="ratingMax"
           type="number"
@@ -64,12 +57,10 @@
           size="sm"
         ></b-form-input>
 
-        <span class="clear-filter" title="clear filter" @click="clearFilter">
-          x
-        </span>
+        <span class="clear-filter" title="clear filter" @click="clearFilter">x</span>
       </b-col>
     </b-row>
-    <table class="table b-table table-striped table-hover mt-5">
+    <table class="table b-table table-striped table-hover mt-5" v-if="filteredResult.length > 0">
       <thead>
         <tr>
           <th>Topic</th>
@@ -89,7 +80,7 @@
           <td>{{ activity.activityLength }}</td>
           <td>{{ activity.userEmail }}</td>
           <td>
-            {{ activity.averageRating }}
+            {{ activity.averageRating }} ({{ activity.ratings.length }})
             <b-button
               size="sm"
               class="mr-2 ml-3"
@@ -98,9 +89,7 @@
                 ratingModal = true;
                 clickedActivity = activity;
               "
-            >
-              Rate Now
-            </b-button>
+            >Rate Now</b-button>
           </td>
         </tr>
       </tbody>
@@ -118,12 +107,16 @@
       centered
     >
       <div class="p-2">
-        <p>Current average rating is {{ clickedActivity.averageRating }}</p>
+        <p>Current average rating is {{ clickedActivity.averageRating }} ({{clickedActivity.ratings.length}})</p>
         <br />
-        <p>Your Rating</p>
+        <p>
+          Your Rating:
+          <span v-if="myGivenRating > -1">{{ myGivenRating }}</span>
+        </p>
         <star-rating
           @rating-selected="giveRating($event)"
           :rating="myRating"
+          v-if="myGivenRating === -1"
         ></star-rating>
       </div>
     </b-modal>
@@ -131,7 +124,7 @@
 </template>
 
 <script>
-import { /*mapActions, */ mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import StarRating from "vue-star-rating";
 
 export default {
@@ -145,7 +138,9 @@ export default {
       ratingMax: "",
       filterTopic: "",
       ratingModal: false,
-      clickedActivity: {},
+      clickedActivity: {
+        ratings: []
+      },
       myRating: 0
     };
   },
@@ -156,9 +151,31 @@ export default {
       loggedUserEmail: "getLoggedUserEmail"
     }),
 
+    myGivenRating() {
+      let myGivenRating = -1;
+      if (!this.clickedActivity.id) {
+        return myGivenRating;
+      }
+
+      let givenIndex = this.clickedActivity.ratings.findIndex(item => {
+        return item.userEmail === this.loggedUserEmail;
+      });
+
+      if (givenIndex > -1) {
+        myGivenRating = this.clickedActivity.ratings[givenIndex].value;
+      }
+
+      return myGivenRating;
+    },
+
     filteredResult() {
       //return this.searchResults;
       let fResult = this.searchResults.filter(item => {
+        // filter by topic
+        if (this.filterTopic && this.filterTopic !== item.topic) {
+          return false;
+        }
+
         // filter by price
         let priceMin = parseFloat(this.priceMin);
         let priceMax = parseFloat(this.priceMax);
@@ -173,9 +190,18 @@ export default {
           }
         }
 
-        // filter by topic
-        if (this.filterTopic && this.filterTopic !== item.topic) {
-          return false;
+        // filter by rating
+        let ratingMin = parseFloat(this.ratingMin);
+        let ratingMax = parseFloat(this.ratingMax);
+        let averageRating = parseFloat(item.averageRating);
+        if (this.ratingMin !== "" && this.ratingMax !== "") {
+          if (
+            averageRating < ratingMin ||
+            averageRating > ratingMax ||
+            ratingMin > ratingMax
+          ) {
+            return false;
+          }
         }
 
         return true;
@@ -201,9 +227,12 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      editActivity: "editActivity"
+    }),
     searchNow() {
       if (!this.searchKeyword) {
-        this.searchResults = "";
+        this.searchResults = [];
         return;
       }
       this.searchResults = this.activities.filter(item => {
@@ -246,6 +275,7 @@ export default {
         value: r
       });
 
+      this.editActivity(this.clickedActivity);
       this.calculateAverageRating(this.clickedActivity);
     }
   },
