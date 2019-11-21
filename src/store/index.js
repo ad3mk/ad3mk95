@@ -9,16 +9,16 @@ import mutations from "./mutations";
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
-	state: {
-		isLoggedIn: false,
-		loggedUserEmail: "",
-		loggedUserName: "",
-		loggedUserRole: "",
-		users: [],
-		classes: []
-	},
-	getters,
-	mutations,
-	actions,
-	plugins: [createPersistedState()]
+  state: {
+    isLoggedIn: false,
+    loggedUserEmail: "",
+    loggedUserName: "",
+    loggedUserRole: "",
+    users: [],
+    activities: []
+  },
+  getters,
+  mutations,
+  actions,
+  plugins: [createPersistedState()]
 });
