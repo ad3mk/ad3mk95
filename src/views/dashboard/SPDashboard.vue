@@ -12,7 +12,6 @@
       <thead>
         <tr>
           <th>Topic</th>
-          <th>Title</th>
           <th>Price</th>
           <th>Time</th>
           <th>Duration</th>
@@ -23,7 +22,6 @@
       <tbody>
         <tr v-for="(myActivity, i) in myActivities" :key="i">
           <td>{{ myActivity.topic }}</td>
-          <td>{{ myActivity.title }}</td>
           <td>{{ myActivity.price }}</td>
           <td>{{ myActivity.activityTime }}</td>
           <td>{{ myActivity.activityLength }}</td>
@@ -64,22 +62,13 @@
     >
       <div class="p-3">
         <b-form @submit="onSubmitAdd" @reset="onResetAdd">
-          <b-form-group id="input-group-1" label="Topic:" label-for="input-1">
-            <b-form-select
+          <b-form-group id="input-group1" label="Topic:" label-for="input-1">
+            <b-form-input
               id="input-1"
               v-model="newActivity.topic"
-              :options="topics"
-              required
-            ></b-form-select>
-          </b-form-group>
-
-          <b-form-group id="input-group-2" label="Title:" label-for="input-2">
-            <b-form-input
-              id="input-2"
-              v-model="newActivity.title"
               type="text"
               required
-              placeholder="Enter Title..."
+              placeholder="Enter Topic..."
             ></b-form-input>
           </b-form-group>
 
@@ -164,30 +153,13 @@
     >
       <div class="p-3">
         <b-form @submit="onSubmitEdit">
-          <b-form-group
-            id="edit-input-group-1"
-            label="Topic:"
-            label-for="edit-input-1"
-          >
-            <b-form-select
-              id="edit-input-1"
-              v-model="clickedActivity.topic"
-              :options="topics"
-              required
-            ></b-form-select>
-          </b-form-group>
-
-          <b-form-group
-            id="edit-input-group-2"
-            label="Title:"
-            label-for="edit-input-2"
-          >
+          <b-form-group id="input-group1" label="Topic:" label-for="input-1">
             <b-form-input
-              id="edit-input-2"
-              v-model="clickedActivity.title"
+              id="input-1"
+              v-model="clickedActivity.topic"
               type="text"
               required
-              placeholder="Enter Title..."
+              placeholder="Enter Topic..."
             ></b-form-input>
           </b-form-group>
 
@@ -327,7 +299,6 @@ export default {
       newActivity: {
         id: "",
         topic: "",
-        title: "",
         description: "",
         price: "",
         location: "",
@@ -336,12 +307,6 @@ export default {
         userEmail: ""
       },
       clickedActivity: {},
-      topics: [
-        { value: "", text: "--Select--" },
-        { value: "Math", text: "Math" },
-        { value: "English", text: "English" },
-        { value: "Sports Club", text: "Sports Club" }
-      ],
       errorMessage: "",
       successMessage: ""
     };
@@ -387,7 +352,6 @@ export default {
       this.newActivity = {
         id: "",
         topic: "",
-        title: "",
         description: "",
         price: "",
         location: "",

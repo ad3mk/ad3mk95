@@ -15,11 +15,54 @@
       </b-col>
     </b-row>
     <br />
-    <table class="table b-table table-striped table-hover">
+    <b-row v-if="searchResults.length > 0">
+      <b-col md="3">
+        <strong>Filter Result</strong>
+      </b-col>
+
+      <b-col md="3"> <span class="mr-2">Topic</span> ttt </b-col>
+      <b-col md="3">
+        <span class="mr-2">Price</span>
+        <b-form-input
+          v-model="priceMin"
+          type="number"
+          placeholder="Min"
+          class="small-input"
+          size="sm"
+        ></b-form-input>
+        -
+        <b-form-input
+          v-model="priceMax"
+          type="number"
+          placeholder="Max"
+          class="small-input"
+          size="sm"
+        ></b-form-input>
+      </b-col>
+      <b-col md="3">
+        <span class="mr-2">Rating</span>
+        <b-form-input
+          v-model="ratingMin"
+          type="number"
+          placeholder="Min"
+          class="small-input"
+          size="sm"
+        ></b-form-input>
+        -
+        <b-form-input
+          v-model="ratingMax"
+          type="number"
+          placeholder="Max"
+          class="small-input"
+          size="sm"
+        ></b-form-input>
+      </b-col>
+    </b-row>
+
+    <table class="table b-table table-striped table-hover mt-5">
       <thead>
         <tr>
           <th>Topic</th>
-          <th>Title</th>
           <th>Price</th>
           <th>Time</th>
           <th>Duration</th>
@@ -29,9 +72,8 @@
       </thead>
 
       <tbody>
-        <tr v-for="(activity, i) in searchResults" :key="i">
+        <tr v-for="(activity, i) in filteredResult" :key="i">
           <td>{{ activity.topic }}</td>
-          <td>{{ activity.title }}</td>
           <td>{{ activity.price }}</td>
           <td>{{ activity.activityTime }}</td>
           <td>{{ activity.activityLength }}</td>
@@ -65,14 +107,43 @@ export default {
   data() {
     return {
       searchKeyword: "",
-      searchResults: []
+      searchResults: [],
+      priceMin: "",
+      priceMax: "",
+      ratingMin: "",
+      ratingMax: ""
     };
   },
 
   computed: {
     ...mapGetters({
       activities: "getActivities"
-    })
+    }),
+
+    filteredResult() {
+      //return this.searchResults;
+      let fResult = this.searchResults.filter(item => {
+        // filter by price
+        let priceMin = parseFloat(this.priceMin);
+        let priceMax = parseFloat(this.priceMax);
+
+        let itemPrice = parseFloat(item.price);
+
+        if (this.priceMin !== "" && this.priceMax !== "") {
+          if (
+            itemPrice < priceMin ||
+            itemPrice > priceMax ||
+            priceMin > priceMax
+          ) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      return fResult;
+    }
   },
 
   methods: {
@@ -90,3 +161,10 @@ export default {
   }
 };
 </script>
+
+<style>
+.small-input {
+  width: 70px;
+  display: inline;
+}
+</style>
