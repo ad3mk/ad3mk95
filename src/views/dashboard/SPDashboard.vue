@@ -280,36 +280,47 @@ export default {
   },
 
   computed: {
+    //get data from store
     ...mapGetters({
       activities: "getActivities",
       userEmail: "getLoggedUserEmail"
     }),
+
+    // activities created by me
     myActivities() {
       let onlyMyActivities = this.activities.filter(item => {
         return item.userEmail === this.userEmail;
       });
-
       return onlyMyActivities;
     }
   },
 
   methods: {
+    // map store actions
     ...mapActions({
       addActivity: "addActivity",
       deleteActivity: "deleteActivity",
       editActivity: "editActivity"
     }),
+
     onSubmitAdd(evt) {
       this.errorMessage = "";
       evt.preventDefault();
+
+      // create an id for uniquely identifying the activity
       this.newActivity.id = "id" + Date.now() + Math.floor(Math.random() * 100);
+
       this.newActivity.userEmail = this.userEmail;
       this.newActivity.ratings = [];
+
+      //disspatch/call store method
       this.addActivity(this.newActivity);
       this.addModal = false;
       this.onResetAdd();
+
       this.successMessage = "Added successfully!";
     },
+
     onResetAdd(evt) {
       if (evt) {
         evt.preventDefault();
@@ -360,6 +371,7 @@ export default {
   watch: {
     errorMessage: function(newVal) {
       if (newVal) {
+        // Automatically hide message after 2 seconds
         setTimeout(() => {
           this.errorMessage = "";
         }, 2000);
@@ -368,6 +380,7 @@ export default {
 
     successMessage: function(newVal) {
       if (newVal) {
+        // Automatically hide message after 2 seconds
         setTimeout(() => {
           this.successMessage = "";
         }, 2000);

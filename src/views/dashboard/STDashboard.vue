@@ -186,13 +186,16 @@ export default {
   },
 
   computed: {
+    //get data from store
     ...mapGetters({
       activities: "getActivities",
       loggedUserEmail: "getLoggedUserEmail"
     }),
 
     myGivenRating() {
-      let myGivenRating = -1;
+      let myGivenRating = -1; // Not rated by me yet
+
+      // Not selected any activity
       if (!this.clickedActivity.id) {
         return myGivenRating;
       }
@@ -201,6 +204,7 @@ export default {
         return item.userEmail === this.loggedUserEmail;
       });
 
+      // Already rated
       if (givenIndex > -1) {
         myGivenRating = this.clickedActivity.ratings[givenIndex].value;
       }
@@ -209,7 +213,6 @@ export default {
     },
 
     filteredResult() {
-      //return this.searchResults;
       let fResult = this.searchResults.filter(item => {
         // filter by topic
         if (this.filterTopic && this.filterTopic !== item.topic) {
@@ -316,12 +319,14 @@ export default {
     },
 
     filterTopics() {
+      // get list of topics of search results
       let fTopics = [{ text: "--Select topic--", value: "" }]; // { text: '', value: '' }
       this.searchResults.forEach(searchItem => {
         let existIndex = fTopics.findIndex(topicItem => {
           return topicItem.text === searchItem.topic;
         });
 
+        // Not added the topic
         if (existIndex === -1) {
           fTopics.push({ text: searchItem.topic, value: searchItem.topic });
         }
@@ -332,20 +337,25 @@ export default {
   },
 
   methods: {
+    // mat store actions/methods
     ...mapActions({
       editActivity: "editActivity"
     }),
+
     searchNow() {
       if (!this.searchKeyword) {
         this.searchResults = [];
         return;
       }
+
       this.searchResults = this.activities.filter(item => {
+        // case insensitive search
         return item.topic
           .toLowerCase()
           .includes(this.searchKeyword.toLowerCase());
       });
 
+      // Calculate average rating
       this.searchResults.forEach(result => {
         this.calculateAverageRating(result);
       });
@@ -356,6 +366,7 @@ export default {
 
       if (activity.ratings.length > 0) {
         let totalRating = 0;
+
         activity.ratings.forEach(rating => {
           totalRating += parseInt(rating.value);
         });
@@ -374,13 +385,15 @@ export default {
     },
 
     giveRating(r) {
-      //console.log(e);
       this.clickedActivity.ratings.push({
         userEmail: this.loggedUserEmail,
         value: r
       });
 
+      // Update the activity on store with ratings
       this.editActivity(this.clickedActivity);
+
+      // Recalculate new average ratings
       this.calculateAverageRating(this.clickedActivity);
     },
 
@@ -396,16 +409,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.small-input {
-  width: 70px;
-  display: inline;
-}
-
-.clear-filter {
-  cursor: pointer;
-  color: red;
-  font-weight: bold;
-}
-</style>
