@@ -15,6 +15,7 @@
           <th>Price</th>
           <th>Time</th>
           <th>Duration</th>
+          <th>Rating</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -25,6 +26,7 @@
           <td>{{ myActivity.price }}</td>
           <td>{{ myActivity.activityTime }}</td>
           <td>{{ myActivity.activityLength }}</td>
+          <td>{{ myActivity.averageRating }}({{ myActivity.ratings.length }})</td>
           <td>
             <b-button
               size="sm"
@@ -34,8 +36,7 @@
                 editModal = true;
                 clickedActivity = myActivity;
               "
-              >Edit</b-button
-            >
+            >Edit</b-button>
             <b-button
               size="sm"
               class="mr-2"
@@ -44,8 +45,7 @@
                 deleteModal = true;
                 clickedActivity = myActivity;
               "
-              >Delete</b-button
-            >
+            >Delete</b-button>
           </td>
         </tr>
       </tbody>
@@ -72,11 +72,7 @@
             ></b-form-input>
           </b-form-group>
 
-          <b-form-group
-            id="input-group-3"
-            label="Description:"
-            label-for="input-3"
-          >
+          <b-form-group id="input-group-3" label="Description:" label-for="input-3">
             <b-form-textarea
               id="input-3"
               v-model="newActivity.description"
@@ -97,11 +93,7 @@
             ></b-form-input>
           </b-form-group>
 
-          <b-form-group
-            id="input-group-5"
-            label="Location:"
-            label-for="input-5"
-          >
+          <b-form-group id="input-group-5" label="Location:" label-for="input-5">
             <b-form-input
               id="input-5"
               v-model="newActivity.location"
@@ -121,11 +113,7 @@
             ></b-form-input>
           </b-form-group>
 
-          <b-form-group
-            id="input-group-7"
-            label="Duration:"
-            label-for="input-7"
-          >
+          <b-form-group id="input-group-7" label="Duration:" label-for="input-7">
             <b-form-input
               id="input-7"
               v-model="newActivity.activityLength"
@@ -163,11 +151,7 @@
             ></b-form-input>
           </b-form-group>
 
-          <b-form-group
-            id="edit-input-group-3"
-            label="Description:"
-            label-for="edit-input-3"
-          >
+          <b-form-group id="edit-input-group-3" label="Description:" label-for="edit-input-3">
             <b-form-textarea
               id="edit-input-3"
               v-model="clickedActivity.description"
@@ -178,11 +162,7 @@
             ></b-form-textarea>
           </b-form-group>
 
-          <b-form-group
-            id="edit-input-group-4"
-            label="Price:"
-            label-for="edit-input-4"
-          >
+          <b-form-group id="edit-input-group-4" label="Price:" label-for="edit-input-4">
             <b-form-input
               id="edit-input-4"
               v-model="clickedActivity.price"
@@ -192,11 +172,7 @@
             ></b-form-input>
           </b-form-group>
 
-          <b-form-group
-            id="edit-input-group-5"
-            label="Location:"
-            label-for="edit-input-5"
-          >
+          <b-form-group id="edit-input-group-5" label="Location:" label-for="edit-input-5">
             <b-form-input
               id="edit-input-5"
               v-model="clickedActivity.location"
@@ -206,11 +182,7 @@
             ></b-form-input>
           </b-form-group>
 
-          <b-form-group
-            id="edit-input-group-6"
-            label="Time:"
-            label-for="edit-input-6"
-          >
+          <b-form-group id="edit-input-group-6" label="Time:" label-for="edit-input-6">
             <b-form-input
               id="edit-input-6"
               v-model="clickedActivity.activityTime"
@@ -220,11 +192,7 @@
             ></b-form-input>
           </b-form-group>
 
-          <b-form-group
-            id="edit-input-group-7"
-            label="Duration:"
-            label-for="edit-input-7"
-          >
+          <b-form-group id="edit-input-group-7" label="Duration:" label-for="edit-input-7">
             <b-form-input
               id="edit-input-7"
               v-model="clickedActivity.activityLength"
@@ -251,16 +219,8 @@
     >
       <div class="p-2">
         <p>Do you really want to delete '{{ clickedActivity.title }}'</p>
-        <b-button
-          type="submit"
-          variant="primary"
-          class="mr-3"
-          @click="deleteActivityNow"
-          >Yes</b-button
-        >
-        <b-button type="reset" variant="danger" @click="deleteModal = false"
-          >No</b-button
-        >
+        <b-button type="submit" variant="primary" class="mr-3" @click="deleteActivityNow">Yes</b-button>
+        <b-button type="reset" variant="danger" @click="deleteModal = false">No</b-button>
       </div>
     </b-modal>
 
@@ -310,6 +270,13 @@ export default {
       errorMessage: "",
       successMessage: ""
     };
+  },
+  mounted() {
+    setTimeout(() => {
+      this.activities.forEach(item => {
+        this.calculateAverageRating(item);
+      });
+    }, 1000);
   },
 
   computed: {
@@ -373,6 +340,20 @@ export default {
       this.deleteModal = false;
       this.deleteActivity(this.clickedActivity.id);
       this.successMessage = "Deleted successfully!";
+    },
+
+    calculateAverageRating(activity) {
+      let averageRating = 0;
+
+      if (activity.ratings.length > 0) {
+        let totalRating = 0;
+        activity.ratings.forEach(rating => {
+          totalRating += parseInt(rating.value);
+        });
+
+        averageRating = totalRating / activity.ratings.length;
+      }
+      activity.averageRating = averageRating;
     }
   },
 
