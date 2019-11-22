@@ -404,6 +404,9 @@ export default {
 
         // calculate average rating
         averageRating = totalRating / activity.ratings.length;
+
+        // Round to two decimal place
+        averageRating = averageRating.toFixed(2);
       }
       activity.averageRating = averageRating;
     }

@@ -59,7 +59,7 @@
           v-model="ratingMax"
           type="number"
           placeholder="Max"
-          class="form-control small-input m-1 form-control-sm"
+          class="form-control small-input m-1 mr-3 form-control-sm"
         />
 
         <span class="clear-filter" title="clear filter" @click="clearFilter"
@@ -404,6 +404,7 @@ export default {
 
         // calculate average rating
         averageRating = totalRating / activity.ratings.length;
+        averageRating = averageRating.toFixed(2);
       }
       activity.averageRating = averageRating;
     },
