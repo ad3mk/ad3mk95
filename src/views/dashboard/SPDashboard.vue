@@ -51,15 +51,7 @@
       </tbody>
     </table>
 
-    <b-modal
-      id="add-modal"
-      scrollable
-      title="Add new class/activity"
-      v-model="addModal"
-      size="lg"
-      hide-footer
-      centered
-    >
+    <my-modal v-model="addModal" title="Add new class/activity" width="555px">
       <div class="p-3">
         <b-form @submit="onSubmitAdd" @reset="onResetAdd">
           <b-form-group id="input-group1" label="Topic:" label-for="input-1">
@@ -128,17 +120,9 @@
           <b-button type="reset" variant="danger">Reset</b-button>
         </b-form>
       </div>
-    </b-modal>
+    </my-modal>
 
-    <b-modal
-      id="edit-modal"
-      scrollable
-      title="Edit this class/activity"
-      v-model="editModal"
-      size="lg"
-      hide-footer
-      centered
-    >
+    <my-modal v-model="editModal" title="Edit this class/activity" width="555px">
       <div class="p-3">
         <b-form @submit="onSubmitEdit">
           <b-form-group id="input-group1" label="Topic:" label-for="input-1">
@@ -206,23 +190,15 @@
           <b-button type="submit" variant="primary" class="mr-3">Save</b-button>
         </b-form>
       </div>
-    </b-modal>
+    </my-modal>
 
-    <b-modal
-      id="delete-modal"
-      scrollable
-      title="Are you sure?"
-      v-model="deleteModal"
-      size="sm"
-      hide-footer
-      centered
-    >
+    <my-modal v-model="deleteModal" width="444px" title="Are you sure?">
       <div class="p-2">
         <p>Do you really want to delete '{{ clickedActivity.title }}'</p>
         <b-button type="submit" variant="primary" class="mr-3" @click="deleteActivityNow">Yes</b-button>
         <b-button type="reset" variant="danger" @click="deleteModal = false">No</b-button>
       </div>
-    </b-modal>
+    </my-modal>
 
     <b-alert
       show

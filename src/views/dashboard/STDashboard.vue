@@ -130,15 +130,7 @@
 
     <br />
 
-    <b-modal
-      id="rating-modal"
-      scrollable
-      title="Rate this class/activity"
-      v-model="ratingModal"
-      size="md"
-      hide-footer
-      centered
-    >
+    <my-modal title="Rate this class/activity" v-model="ratingModal" width="444px">
       <div class="p-2">
         <p>Current average rating is {{ clickedActivity.averageRating }} ({{clickedActivity.ratings.length}})</p>
 
@@ -149,19 +141,20 @@
             <br />(Your rating can not be changed)
           </span>
         </p>
-        <star-rating
-          @rating-selected="giveRating($event)"
+        <!-- <star-rating
+          @rated="giveRating($event)"
           :rating="myRating"
           v-if="myGivenRating === -1"
-        ></star-rating>
+        ></star-rating>-->
+
+        <my-rating @rated="giveRating($event)" :rating="myRating" v-if="myGivenRating === -1"></my-rating>
       </div>
-    </b-modal>
+    </my-modal>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import StarRating from "vue-star-rating";
 
 export default {
   data() {
@@ -402,10 +395,6 @@ export default {
       this.sorting.order =
         this.sorting.order === "ascending" ? "descending" : "ascending";
     }
-  },
-
-  components: {
-    StarRating
   }
 };
 </script>
