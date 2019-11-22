@@ -55,13 +55,17 @@ export default {
     }),
 
     goToDashboard() {
+      // check if already in dashboard route
       if (this.$route.name !== "dashboard") {
         this.$router.push("/dashboard");
       }
     },
 
     logoutNow() {
+      // call/dispatch logout method on store
       this.logout();
+
+      // redirect to login page
       this.$router.push("/login");
     }
   }

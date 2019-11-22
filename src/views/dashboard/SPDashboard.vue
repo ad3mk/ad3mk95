@@ -307,6 +307,7 @@ export default {
     };
   },
   mounted() {
+    // add new field averageRating to all activity
     setTimeout(() => {
       this.activities.forEach(item => {
         this.calculateAverageRating(item);
@@ -357,6 +358,7 @@ export default {
     },
 
     onResetAdd(evt) {
+      // prevent submitting the form
       if (evt) {
         evt.preventDefault();
       }
@@ -377,6 +379,7 @@ export default {
     onSubmitEdit(evt) {
       this.errorMessage = "";
       evt.preventDefault();
+
       this.editActivity(this.clickedActivity);
       this.successMessage = "Activity edited successfully!";
       this.editModal = false;
@@ -393,10 +396,13 @@ export default {
 
       if (activity.ratings.length > 0) {
         let totalRating = 0;
+
+        // calculate the sum of all ratings
         activity.ratings.forEach(rating => {
           totalRating += parseInt(rating.value);
         });
 
+        // calculate average rating
         averageRating = totalRating / activity.ratings.length;
       }
       activity.averageRating = averageRating;

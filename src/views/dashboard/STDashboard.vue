@@ -31,20 +31,19 @@
       </b-col>
       <b-col md="4">
         <span class="m-1 mr-2">Price</span>
+
         <input
           v-model="priceMin"
           type="number"
           placeholder="Min"
-          class="form-control small-input m-1"
-          size="sm"
+          class="form-control small-input m-1 form-control-sm"
         />
         -
         <input
           v-model="priceMax"
           type="number"
           placeholder="Max"
-          class="form-control small-input m-1"
-          size="sm"
+          class="form-control small-input m-1 form-control-sm"
         />
       </b-col>
       <b-col md="4">
@@ -53,16 +52,14 @@
           v-model="ratingMin"
           type="number"
           placeholder="Min"
-          class="form-control small-input m-1"
-          size="sm"
+          class="form-control small-input m-1 form-control-sm"
         />
         -
         <input
           v-model="ratingMax"
           type="number"
           placeholder="Max"
-          class="form-controlsmall-input m-1 mr-3"
-          size="sm"
+          class="form-control small-input m-1 form-control-sm"
         />
 
         <span class="clear-filter" title="clear filter" @click="clearFilter"
@@ -241,6 +238,10 @@ export default {
 
     filteredResult() {
       let fResult = this.searchResults.filter(item => {
+        /***
+         * 'return false' means current item will be excluded in filtered result
+         */
+
         // filter by topic
         if (this.filterTopic && this.filterTopic !== item.topic) {
           return false;
@@ -250,6 +251,7 @@ export default {
         let priceMin = parseFloat(this.priceMin);
         let priceMax = parseFloat(this.priceMax);
         let itemPrice = parseFloat(item.price);
+        // check if both min and max value entered
         if (this.priceMin !== "" && this.priceMax !== "") {
           if (
             itemPrice < priceMin ||
@@ -264,6 +266,7 @@ export default {
         let ratingMin = parseFloat(this.ratingMin);
         let ratingMax = parseFloat(this.ratingMax);
         let averageRating = parseFloat(item.averageRating);
+        // check if both min and max value entered
         if (this.ratingMin !== "" && this.ratingMax !== "") {
           if (
             averageRating < ratingMin ||
@@ -394,10 +397,12 @@ export default {
       if (activity.ratings.length > 0) {
         let totalRating = 0;
 
+        // calculate the sum of all ratings
         activity.ratings.forEach(rating => {
           totalRating += parseInt(rating.value);
         });
 
+        // calculate average rating
         averageRating = totalRating / activity.ratings.length;
       }
       activity.averageRating = averageRating;
@@ -425,7 +430,10 @@ export default {
     },
 
     sortBy(by) {
+      // set the sort by value
       this.sorting.sortBy = by;
+
+      // toggle order
       this.sorting.order =
         this.sorting.order === "ascending" ? "descending" : "ascending";
     }

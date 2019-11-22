@@ -2,11 +2,14 @@
   <transition name="modal">
     <div class="amodal" v-show="value">
       <transition name="zoom">
-        <div class="amodal__container" v-if="value" :style="{width: width}">
+        <div class="amodal__container" v-if="value" :style="{ width: width }">
           <div class="amodal__header">
             <div class="aspace-between">
               <div class="amodal__title">{{ title }}</div>
-              <div @click="$emit('input', false)" class="amodal__close">&times;</div>
+              <!-- emit input event to change v-model data automatically -->
+              <div @click="$emit('input', false)" class="amodal__close">
+                &times;
+              </div>
             </div>
           </div>
 
