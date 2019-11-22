@@ -5,30 +5,42 @@
       <div class="card-container">
         <b-card header="User Login">
           <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-            <b-form-group id="input-group-1" label="Email address:" label-for="input-1">
-              <b-form-input
+            <b-form-group
+              id="input-group-1"
+              label="Email address:"
+              label-for="input-1"
+            >
+              <input
                 id="input-1"
                 v-model="form.email"
                 type="email"
                 required
                 placeholder="Enter email"
                 ref="email"
-              ></b-form-input>
+                class="form-control"
+              />
             </b-form-group>
 
-            <b-form-group id="input-group-2" label="Password:" label-for="input-2">
-              <b-form-input
+            <b-form-group
+              id="input-group-2"
+              label="Password:"
+              label-for="input-2"
+            >
+              <input
                 id="input-2"
                 v-model="form.password"
                 type="password"
                 required
                 placeholder="Enter password"
                 ref="password"
-              ></b-form-input>
+                class="form-control"
+              />
             </b-form-group>
 
             <br />
-            <b-button type="submit" variant="primary" class="mr-3">Login</b-button>
+            <b-button type="submit" variant="primary" class="mr-3"
+              >Login</b-button
+            >
             <b-button type="reset" variant="danger">Reset</b-button>
           </b-form>
         </b-card>

@@ -26,7 +26,9 @@
           <td>{{ myActivity.price }}</td>
           <td>{{ myActivity.activityTime }}</td>
           <td>{{ myActivity.activityLength }}</td>
-          <td>{{ myActivity.averageRating }}({{ myActivity.ratings.length }})</td>
+          <td>
+            {{ myActivity.averageRating }}({{ myActivity.ratings.length }})
+          </td>
           <td>
             <b-button
               size="sm"
@@ -36,7 +38,8 @@
                 editModal = true;
                 clickedActivity = myActivity;
               "
-            >Edit</b-button>
+              >Edit</b-button
+            >
             <b-button
               size="sm"
               class="mr-2"
@@ -45,7 +48,8 @@
                 deleteModal = true;
                 clickedActivity = myActivity;
               "
-            >Delete</b-button>
+              >Delete</b-button
+            >
           </td>
         </tr>
       </tbody>
@@ -55,64 +59,82 @@
       <div class="p-3">
         <b-form @submit="onSubmitAdd" @reset="onResetAdd">
           <b-form-group id="input-group1" label="Topic:" label-for="input-1">
-            <b-form-input
+            <input
               id="input-1"
               v-model="newActivity.topic"
               type="text"
               required
               placeholder="Enter Topic..."
-            ></b-form-input>
+              class="form-control"
+            />
           </b-form-group>
 
-          <b-form-group id="input-group-3" label="Description:" label-for="input-3">
-            <b-form-textarea
+          <b-form-group
+            id="input-group-3"
+            label="Description:"
+            label-for="input-3"
+          >
+            <textarea
               id="input-3"
               v-model="newActivity.description"
               placeholder="Description..."
               rows="3"
               max-rows="6"
               required
-            ></b-form-textarea>
+              class="form-control"
+            ></textarea>
           </b-form-group>
 
           <b-form-group id="input-group-4" label="Price:" label-for="input-4">
-            <b-form-input
+            <input
               id="input-4"
               v-model="newActivity.price"
               type="number"
               required
               placeholder="Enter Price..."
-            ></b-form-input>
+              class="form-control"
+            />
           </b-form-group>
 
-          <b-form-group id="input-group-5" label="Location:" label-for="input-5">
-            <b-form-input
+          <b-form-group
+            id="input-group-5"
+            label="Location:"
+            label-for="input-5"
+          >
+            <input
               id="input-5"
               v-model="newActivity.location"
               type="text"
               required
               placeholder="Enter Location..."
-            ></b-form-input>
+              class="form-control"
+            />
           </b-form-group>
 
           <b-form-group id="input-group-6" label="Time:" label-for="input-6">
-            <b-form-input
+            <input
               id="input-6"
               v-model="newActivity.activityTime"
               type="text"
               required
               placeholder="Class/activity time..."
-            ></b-form-input>
+              class="form-control"
+            />
           </b-form-group>
 
-          <b-form-group id="input-group-7" label="Duration:" label-for="input-7">
-            <b-form-input
+          <b-form-group
+            id="input-group-7"
+            label="Duration:"
+            label-for="input-7"
+          >
+            <input
               id="input-7"
               v-model="newActivity.activityLength"
               type="text"
               required
               placeholder="Class/activity length..."
-            ></b-form-input>
+              class="form-control"
+            />
           </b-form-group>
 
           <br />
@@ -122,20 +144,29 @@
       </div>
     </my-modal>
 
-    <my-modal v-model="editModal" title="Edit this class/activity" width="555px">
+    <my-modal
+      v-model="editModal"
+      title="Edit this class/activity"
+      width="555px"
+    >
       <div class="p-3">
         <b-form @submit="onSubmitEdit">
           <b-form-group id="input-group1" label="Topic:" label-for="input-1">
-            <b-form-input
+            <input
               id="input-1"
               v-model="clickedActivity.topic"
               type="text"
               required
               placeholder="Enter Topic..."
-            ></b-form-input>
+              class="form-control"
+            />
           </b-form-group>
 
-          <b-form-group id="edit-input-group-3" label="Description:" label-for="edit-input-3">
+          <b-form-group
+            id="edit-input-group-3"
+            label="Description:"
+            label-for="edit-input-3"
+          >
             <b-form-textarea
               id="edit-input-3"
               v-model="clickedActivity.description"
@@ -146,44 +177,64 @@
             ></b-form-textarea>
           </b-form-group>
 
-          <b-form-group id="edit-input-group-4" label="Price:" label-for="edit-input-4">
-            <b-form-input
+          <b-form-group
+            id="edit-input-group-4"
+            label="Price:"
+            label-for="edit-input-4"
+          >
+            <input
               id="edit-input-4"
               v-model="clickedActivity.price"
               type="number"
               required
               placeholder="Enter Price..."
-            ></b-form-input>
+              class="form-control"
+            />
           </b-form-group>
 
-          <b-form-group id="edit-input-group-5" label="Location:" label-for="edit-input-5">
-            <b-form-input
+          <b-form-group
+            id="edit-input-group-5"
+            label="Location:"
+            label-for="edit-input-5"
+          >
+            <input
               id="edit-input-5"
               v-model="clickedActivity.location"
               type="text"
               required
               placeholder="Enter Location..."
-            ></b-form-input>
+              class="form-control"
+            />
           </b-form-group>
 
-          <b-form-group id="edit-input-group-6" label="Time:" label-for="edit-input-6">
-            <b-form-input
+          <b-form-group
+            id="edit-input-group-6"
+            label="Time:"
+            label-for="edit-input-6"
+          >
+            <input
               id="edit-input-6"
               v-model="clickedActivity.activityTime"
               type="text"
               required
               placeholder="Class/activity time..."
-            ></b-form-input>
+              class="form-control"
+            />
           </b-form-group>
 
-          <b-form-group id="edit-input-group-7" label="Duration:" label-for="edit-input-7">
-            <b-form-input
+          <b-form-group
+            id="edit-input-group-7"
+            label="Duration:"
+            label-for="edit-input-7"
+          >
+            <input
               id="edit-input-7"
               v-model="clickedActivity.activityLength"
               type="text"
               required
               placeholder="Class/activity length..."
-            ></b-form-input>
+              class="form-control"
+            />
           </b-form-group>
 
           <br />
@@ -194,9 +245,17 @@
 
     <my-modal v-model="deleteModal" width="444px" title="Are you sure?">
       <div class="p-2">
-        <p>Do you really want to delete '{{ clickedActivity.title }}'</p>
-        <b-button type="submit" variant="primary" class="mr-3" @click="deleteActivityNow">Yes</b-button>
-        <b-button type="reset" variant="danger" @click="deleteModal = false">No</b-button>
+        <p>Do you really want to delete '{{ clickedActivity.topic }}'</p>
+        <b-button
+          type="submit"
+          variant="primary"
+          class="mr-3"
+          @click="deleteActivityNow"
+          >Yes</b-button
+        >
+        <b-button type="reset" variant="danger" @click="deleteModal = false"
+          >No</b-button
+        >
       </div>
     </my-modal>
 

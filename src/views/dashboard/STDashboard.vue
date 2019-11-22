@@ -2,13 +2,14 @@
   <div>
     <b-row>
       <b-col>
-        <b-form-input
+        <input
           id="input-2"
           v-model="searchKeyword"
           type="text"
           placeholder="Search class/activity ..."
           ref="searchKeyword"
-        ></b-form-input>
+          class="form-control"
+        />
       </b-col>
       <b-col>
         <b-button variant="primary" @click="searchNow">Search</b-button>
@@ -21,53 +22,67 @@
       </b-col>
 
       <b-col md="2">
-        <b-form-select v-model="filterTopic" :options="filterTopics" size="sm" class="m-1"></b-form-select>
+        <b-form-select
+          v-model="filterTopic"
+          :options="filterTopics"
+          size="sm"
+          class="m-1"
+        ></b-form-select>
       </b-col>
       <b-col md="4">
         <span class="m-1 mr-2">Price</span>
-        <b-form-input
+        <input
           v-model="priceMin"
           type="number"
           placeholder="Min"
-          class="small-input m-1"
+          class="form-control small-input m-1"
           size="sm"
-        ></b-form-input>-
-        <b-form-input
+        />
+        -
+        <input
           v-model="priceMax"
           type="number"
           placeholder="Max"
-          class="small-input m-1"
+          class="form-control small-input m-1"
           size="sm"
-        ></b-form-input>
+        />
       </b-col>
       <b-col md="4">
         <span class="m-1 mr-2">Rating</span>
-        <b-form-input
+        <input
           v-model="ratingMin"
           type="number"
           placeholder="Min"
-          class="small-input m-1"
+          class="form-control small-input m-1"
           size="sm"
-        ></b-form-input>-
-        <b-form-input
+        />
+        -
+        <input
           v-model="ratingMax"
           type="number"
           placeholder="Max"
-          class="small-input m-1 mr-3"
+          class="form-controlsmall-input m-1 mr-3"
           size="sm"
-        ></b-form-input>
+        />
 
-        <span class="clear-filter" title="clear filter" @click="clearFilter">x</span>
+        <span class="clear-filter" title="clear filter" @click="clearFilter"
+          >x</span
+        >
       </b-col>
     </b-row>
-    <table class="table b-table table-striped table-hover mt-5" v-if="filteredResult.length > 0">
+    <table
+      class="table b-table table-striped table-hover mt-5"
+      v-if="filteredResult.length > 0"
+    >
       <thead>
         <tr>
           <th @click="sortBy('topic')" class="sortable">
             Topic
             <span
               class="arrow-up"
-              v-if="sorting.sortBy === 'topic' && sorting.order === 'descending'"
+              v-if="
+                sorting.sortBy === 'topic' && sorting.order === 'descending'
+              "
             ></span>
 
             <span
@@ -79,7 +94,9 @@
             Price
             <span
               class="arrow-up"
-              v-if="sorting.sortBy === 'price' && sorting.order === 'descending'"
+              v-if="
+                sorting.sortBy === 'price' && sorting.order === 'descending'
+              "
             ></span>
 
             <span
@@ -94,12 +111,16 @@
             Rating
             <span
               class="arrow-up"
-              v-if="sorting.sortBy === 'rating' && sorting.order === 'descending'"
+              v-if="
+                sorting.sortBy === 'rating' && sorting.order === 'descending'
+              "
             ></span>
 
             <span
               class="arrow-down"
-              v-if="sorting.sortBy === 'rating' && sorting.order === 'ascending'"
+              v-if="
+                sorting.sortBy === 'rating' && sorting.order === 'ascending'
+              "
             ></span>
           </th>
         </tr>
@@ -122,7 +143,8 @@
                 ratingModal = true;
                 clickedActivity = activity;
               "
-            >Rate Now</b-button>
+              >Rate Now</b-button
+            >
           </td>
         </tr>
       </tbody>
@@ -130,9 +152,17 @@
 
     <br />
 
-    <my-modal title="Rate this class/activity" v-model="ratingModal" width="444px">
+    <my-modal
+      title="Rate this class/activity"
+      v-model="ratingModal"
+      width="444px"
+    >
       <div class="p-2">
-        <p>Current average rating is {{ clickedActivity.averageRating }} ({{clickedActivity.ratings.length}})</p>
+        <p>
+          Current average rating is {{ clickedActivity.averageRating }} ({{
+            clickedActivity.ratings.length
+          }})
+        </p>
 
         <p>
           Your Rating:
@@ -147,7 +177,11 @@
           v-if="myGivenRating === -1"
         ></star-rating>-->
 
-        <my-rating @rated="giveRating($event)" :rating="myRating" v-if="myGivenRating === -1"></my-rating>
+        <my-rating
+          @rated="giveRating($event)"
+          :rating="myRating"
+          v-if="myGivenRating === -1"
+        ></my-rating>
       </div>
     </my-modal>
   </div>
